@@ -1,6 +1,6 @@
-package com.bvk.test.backend_organization.entity;
+package com.bvk.test.backend_organization.entities;
 
-import com.bvk.test.backend_organization.RoleEnum;
+import com.bvk.test.backend_organization.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
