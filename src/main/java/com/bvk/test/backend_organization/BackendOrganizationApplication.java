@@ -26,7 +26,7 @@ public class BackendOrganizationApplication {
 					.role(RoleEnum.ADMIN)
 					.build();
 
-			userService.save(user);
+			userService.saveUser(user);
 		};
 	}
 }
