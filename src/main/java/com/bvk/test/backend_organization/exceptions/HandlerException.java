@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -34,6 +35,17 @@ public class HandlerException {
                 .build());
     }
 
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public @ResponseBody ResponseEntity<ResponseData<String>> handleRequestParamException(
+            MissingServletRequestParameterException exception) {
+        return ResponseEntity.badRequest().body(ResponseData.<String>builder()
+                .code(ResponseCode.VALIDATION_ERROR.getCode())
+                .message(ResponseCode.VALIDATION_ERROR.getMessage())
+                .data(exception.getMessage())
+                .build());
+    }
+
     @ExceptionHandler(ExpiredJwtException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public @ResponseBody ResponseEntity<ResponseData<HashMap>> handleAuthenticationException(
@@ -43,7 +55,7 @@ public class HandlerException {
         error.put("message", exception.getMessage());
 
         return ResponseEntity
-                .badRequest()
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(ResponseData.<HashMap>builder()
                         .code(ResponseCode.JWT_EXPIRED.getCode())
                         .message(ResponseCode.JWT_EXPIRED.getMessage())
@@ -60,7 +72,7 @@ public class HandlerException {
         error.put("message", exception.getMessage());
 
         return ResponseEntity
-                .badRequest()
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(ResponseData.<HashMap>builder()
                         .code(ResponseCode.SIGNATURE_ERROR.getCode())
                         .message(ResponseCode.SIGNATURE_ERROR.getMessage())
@@ -74,6 +86,7 @@ public class HandlerException {
             Throwable exception
     ) {
 
+        exception.printStackTrace();
         log.error("Error global handling exception -> {}", exception.getMessage());
 
         return ResponseEntity

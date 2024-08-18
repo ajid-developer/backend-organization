@@ -9,16 +9,14 @@ import lombok.NonNull;
 
 @Data
 public class RegistrationRequest {
-    @Valid
-
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Name tidak boleh null")
+    @NotBlank(message = "Name harus diisi")
     private String name;
-    @NotNull
-    @NotBlank
-    @Email
+    @NotNull(message = "Email tidak boleh null")
+    @NotBlank(message = "Email harus diisi")
+    @Email(message = "Email tidak valid")
     private String email;
-    @NotNull
-    @NotBlank
+    @NotNull(message = "Password tidak boleh null")
+    @NotBlank(message = "Password harus diisi")
     private String password;
 }
